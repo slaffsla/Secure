@@ -6,7 +6,7 @@ import { IntakePanel } from './components/IntakePanel';
 import { Report } from './components/Report';
 import { evidenceDefaults } from './data/evidenceSlots';
 import { initialIntake } from './data/intakeOptions';
-import { buildFindings, scoreEvidence } from './engine/riskEngine';
+import { buildAssessmentModel, scoreEvidence } from './engine/riskEngine';
 import { loadDraft, mergeDraftSlots, saveDraft } from './storage/draftStorage';
 import type { EvidenceKey, EvidenceSlot, Intake } from './types';
 
@@ -17,7 +17,7 @@ export function App() {
   const [reportReady, setReportReady] = React.useState(false);
 
   const evidence = scoreEvidence(slots);
-  const findings = buildFindings(intake, slots);
+  const assessment = buildAssessmentModel(intake, slots);
 
   const updateIntake = <K extends keyof Intake>(key: K, value: Intake[K]) => {
     setIntake((current) => ({ ...current, [key]: value }));
@@ -45,7 +45,7 @@ export function App() {
 
   return (
     <main>
-      <Hero evidence={evidence} findings={findings} />
+      <Hero evidence={evidence} findings={assessment.findings} />
 
       <section className="workspace">
         <IntakePanel intake={intake} onChange={updateIntake} />
@@ -64,7 +64,7 @@ export function App() {
             </button>
           </div>
 
-          <Report evidence={evidence} findings={findings} intake={intake} visible={reportReady} />
+          <Report assessment={assessment} evidence={evidence} intake={intake} visible={reportReady} />
         </section>
       </section>
     </main>

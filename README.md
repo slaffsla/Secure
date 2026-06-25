@@ -9,7 +9,7 @@ The current app is intentionally cheap to test: it runs as a React/Vite client a
 - `src/components` - UI sections for intake, evidence collection, hero metrics, and reports.
 - `src/data` - configurable intake options and evidence slot definitions.
 - `src/data/recommendations.ts` - reusable mitigation catalog with impact, cost, effort, rationale, and cautions.
-- `src/engine` - local scoring and finding generation that links findings to recommendation IDs.
+- `src/engine` - local evidence, observation, risk-factor, and finding generation.
 - `src/storage` - local draft persistence.
 - `src/types.ts` - shared domain types.
 
@@ -33,3 +33,16 @@ npm run build
 ## Product Principle
 
 The report should be credible because it is clear about evidence, uncertainty, and what to fix first.
+
+## Reasoning Pipeline
+
+```txt
+Intake + uploads
+  -> Evidence items
+  -> Observations
+  -> Risk factors
+  -> Recommendation matches
+  -> Report
+```
+
+This keeps paid AI optional. Vision models can later add observations, while the local engine remains responsible for scoring, traceability, and recommendation priority.

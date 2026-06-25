@@ -48,6 +48,50 @@ export type EvidenceScore = {
   missing: EvidenceSlot[];
 };
 
+export type EvidenceSource = 'user' | 'ai' | 'human-reviewer' | 'public-data' | 'rule';
+
+export type EvidenceItem = {
+  id: string;
+  type: 'photo' | 'questionnaire' | 'address' | 'review-note';
+  label: string;
+  source: EvidenceSource;
+  category?: EvidenceKey;
+  detail: string;
+};
+
+export type ObservationKind =
+  | 'evidence_slot_provided'
+  | 'evidence_slot_missing'
+  | 'address_context_provided'
+  | 'address_context_missing'
+  | 'security_control_reported'
+  | 'security_control_not_reported'
+  | 'buyer_mode'
+  | 'concern_reported';
+
+export type Observation = {
+  id: string;
+  kind: ObservationKind;
+  label: string;
+  confidence: number;
+  source: EvidenceSource;
+  evidenceIds: string[];
+  metadata?: Record<string, string>;
+};
+
+export type RiskDomain = 'burglary' | 'forced-entry' | 'visibility' | 'surveillance' | 'smart-home' | 'buyer';
+
+export type RiskFactor = {
+  id: string;
+  domain: RiskDomain;
+  title: string;
+  severity: number;
+  likelihood: number;
+  confidence: number;
+  observationIds: string[];
+  recommendationIds: string[];
+};
+
 export type Recommendation = {
   id: string;
   title: string;
@@ -61,10 +105,20 @@ export type Recommendation = {
 };
 
 export type Finding = {
+  id: string;
   domain: string;
   title: string;
   severity: number;
   confidence: number;
   evidence: string;
+  observationIds: string[];
+  riskFactorIds: string[];
   recommendationIds: string[];
+};
+
+export type AssessmentModel = {
+  evidenceItems: EvidenceItem[];
+  observations: Observation[];
+  riskFactors: RiskFactor[];
+  findings: Finding[];
 };

@@ -1,16 +1,16 @@
 import { FileText, Lock } from 'lucide-react';
 import { getRecommendation } from '../data/recommendations';
-import type { EvidenceScore, Finding, Intake } from '../types';
+import type { AssessmentModel, EvidenceScore, Intake } from '../types';
 
 type ReportProps = {
+  assessment: AssessmentModel;
   evidence: EvidenceScore;
-  findings: Finding[];
   intake: Intake;
   visible: boolean;
 };
 
-export function Report({ evidence, findings, intake, visible }: ReportProps) {
-  const topFixes = findings.slice(0, 5);
+export function Report({ assessment, evidence, intake, visible }: ReportProps) {
+  const topFixes = assessment.findings.slice(0, 5);
 
   return (
     <section className={visible ? 'report visible' : 'report'}>
@@ -32,6 +32,14 @@ export function Report({ evidence, findings, intake, visible }: ReportProps) {
           <span>Review path</span>
           <strong>{intake.humanReview ? 'Human' : 'Automated'}</strong>
         </div>
+        <div>
+          <span>Observations</span>
+          <strong>{assessment.observations.length}</strong>
+        </div>
+        <div>
+          <span>Risk factors</span>
+          <strong>{assessment.riskFactors.length}</strong>
+        </div>
       </div>
 
       <div className="report-columns">
@@ -47,6 +55,18 @@ export function Report({ evidence, findings, intake, visible }: ReportProps) {
               </div>
               <h4>{finding.title}</h4>
               <p>{finding.evidence}</p>
+              <div className="observation-list">
+                {finding.observationIds.map((id) => {
+                  const observation = assessment.observations.find((item) => item.id === id);
+                  if (!observation) return null;
+
+                  return (
+                    <span key={observation.id}>
+                      {observation.label} · {observation.confidence}% confidence
+                    </span>
+                  );
+                })}
+              </div>
               <div className="recommendation-list">
                 {finding.recommendationIds.map((id) => {
                   const recommendation = getRecommendation(id);

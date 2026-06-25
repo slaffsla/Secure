@@ -366,7 +366,7 @@ select {
 
 .report-summary {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   overflow: hidden;
 }
 
@@ -427,6 +427,22 @@ select {
 .recommendation-list {
   display: grid;
   gap: 9px;
+}
+
+.observation-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.observation-list span {
+  border: 1px solid #d4ded1;
+  border-radius: 999px;
+  background: #eef5eb;
+  color: #435348;
+  padding: 5px 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 .recommendation {
