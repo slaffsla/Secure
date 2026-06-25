@@ -404,7 +404,7 @@ select {
 
 .finding {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   padding: 16px;
 }
 
@@ -422,6 +422,51 @@ select {
 .finding small {
   color: #46544b;
   font-weight: 800;
+}
+
+.recommendation-list {
+  display: grid;
+  gap: 9px;
+}
+
+.recommendation {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  border: 1px solid #d9e2d6;
+  border-radius: 6px;
+  background: #f8fbf6;
+}
+
+.recommendation-head {
+  display: grid;
+  gap: 3px;
+}
+
+.recommendation-head strong {
+  color: #17251c;
+}
+
+.recommendation-head span,
+.recommendation small {
+  color: #4f6056;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.recommendation p,
+.recommendation ul {
+  margin: 0;
+}
+
+.recommendation ul {
+  display: grid;
+  gap: 4px;
+  padding-left: 18px;
+  color: #5b4b31;
+  font-size: 0.84rem;
+  line-height: 1.4;
 }
 
 .prompt {

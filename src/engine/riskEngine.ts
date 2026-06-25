@@ -1,3 +1,4 @@
+import { recommendationById } from '../data/recommendations';
 import type { EvidenceKey, EvidenceScore, EvidenceSlot, Finding, Intake } from '../types';
 
 export function scoreEvidence(slots: EvidenceSlot[]): EvidenceScore {
@@ -24,10 +25,7 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 5,
       confidence: 4,
       evidence: 'No rear-access photos were provided.',
-      recommendation:
-        'Prioritize rear door, yard, and gate documentation. Until reviewed, treat rear access as a high-uncertainty exposure and verify locks, lighting, and gate control.',
-      cost: '$-$$',
-      effort: 'DIY first, installer if hardware is weak',
+      recommendationIds: ['rear-access-documentation', 'targeted-motion-lighting'],
     });
   }
 
@@ -38,10 +36,7 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 5,
       confidence: 3,
       evidence: 'No lock or door-frame close-ups were provided.',
-      recommendation:
-        'Collect close-ups of all exterior locks, strike plates, hinges, and adjacent glass. High-impact upgrades often include reinforced strike plates, longer screws, and secondary locks.',
-      cost: '$',
-      effort: 'DIY or locksmith',
+      recommendationIds: ['reinforce-door-strikes', 'secondary-door-locking'],
     });
   }
 
@@ -52,10 +47,7 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 4,
       confidence: intake.addressKnown ? 3 : 2,
       evidence: 'The intake does not list exterior lighting as an existing control.',
-      recommendation:
-        'Verify motion lighting at approach paths, rear entry, garage, and side gates. Favor targeted lighting that removes concealment without exposing private interior routines.',
-      cost: '$-$$',
-      effort: 'DIY or electrician',
+      recommendationIds: ['targeted-motion-lighting'],
     });
   }
 
@@ -66,10 +58,7 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 3,
       confidence: 3,
       evidence: 'The intake does not list cameras as an existing control.',
-      recommendation:
-        'Consider cameras only after locks, lighting, and access control are handled. Prioritize entrances and package zones over broad, privacy-invasive coverage.',
-      cost: '$$',
-      effort: 'DIY or low-voltage installer',
+      recommendationIds: ['camera-after-access-control'],
     });
   }
 
@@ -80,10 +69,7 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 3,
       confidence: 2,
       evidence: 'Smart-home concern was selected, but no device photos or inventory were provided.',
-      recommendation:
-        'Create a device inventory before buying new equipment. Record model names, app ownership, update status, and whether default credentials were changed.',
-      cost: '$',
-      effort: 'DIY',
+      recommendationIds: ['device-inventory'],
     });
   }
 
@@ -94,12 +80,21 @@ export function buildFindings(intake: Intake, slots: EvidenceSlot[]): Finding[] 
       severity: 4,
       confidence: 4,
       evidence: 'The property is being assessed for a buyer.',
-      recommendation:
-        'Use the report to request seller disclosures, ask for lock rekeying after closing, and budget immediate fixes before move-in patterns become visible.',
-      cost: '$-$$$',
-      effort: 'Buyer agent plus locksmith/installer',
+      recommendationIds: ['post-closing-rekey', 'pre-move-security-budget'],
     });
   }
 
-  return findings.sort((a, b) => b.severity * b.confidence - a.severity * a.confidence);
+  return findings
+    .map((finding) => ({
+      ...finding,
+      recommendationIds: finding.recommendationIds.filter((id) => {
+        const exists = recommendationById.has(id);
+        if (!exists) {
+          console.warn(`Unknown recommendation id: ${id}`);
+        }
+
+        return exists;
+      }),
+    }))
+    .sort((a, b) => b.severity * b.confidence - a.severity * a.confidence);
 }

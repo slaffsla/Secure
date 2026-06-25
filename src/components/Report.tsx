@@ -1,4 +1,5 @@
 import { FileText, Lock } from 'lucide-react';
+import { getRecommendation } from '../data/recommendations';
 import type { EvidenceScore, Finding, Intake } from '../types';
 
 type ReportProps = {
@@ -45,10 +46,34 @@ export function Report({ evidence, findings, intake, visible }: ReportProps) {
                 </strong>
               </div>
               <h4>{finding.title}</h4>
-              <p>{finding.recommendation}</p>
-              <small>
-                {finding.cost} · {finding.effort}
-              </small>
+              <p>{finding.evidence}</p>
+              <div className="recommendation-list">
+                {finding.recommendationIds.map((id) => {
+                  const recommendation = getRecommendation(id);
+                  if (!recommendation) return null;
+
+                  return (
+                    <div className="recommendation" key={recommendation.id}>
+                      <div className="recommendation-head">
+                        <strong>{recommendation.title}</strong>
+                        <span>
+                          Impact {recommendation.impact} · {recommendation.costBand} ·{' '}
+                          {recommendation.effort.replace(/-/g, ' ')}
+                        </span>
+                      </div>
+                      <p>{recommendation.summary}</p>
+                      <small>{recommendation.whyItMatters}</small>
+                      {recommendation.cautions.length > 0 && (
+                        <ul>
+                          {recommendation.cautions.map((caution) => (
+                            <li key={caution}>{caution}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </article>
           ))}
         </div>

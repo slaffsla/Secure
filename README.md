@@ -8,7 +8,8 @@ The current app is intentionally cheap to test: it runs as a React/Vite client a
 
 - `src/components` - UI sections for intake, evidence collection, hero metrics, and reports.
 - `src/data` - configurable intake options and evidence slot definitions.
-- `src/engine` - local scoring and finding generation.
+- `src/data/recommendations.ts` - reusable mitigation catalog with impact, cost, effort, rationale, and cautions.
+- `src/engine` - local scoring and finding generation that links findings to recommendation IDs.
 - `src/storage` - local draft persistence.
 - `src/types.ts` - shared domain types.
 
@@ -19,6 +20,7 @@ The current app is intentionally cheap to test: it runs as a React/Vite client a
 3. Add Firebase only when real testers need accounts and persistent uploads.
 4. Add paid vision analysis behind a feature flag and per-report cost cap.
 5. Keep vendor recommendations category-first until report quality is proven.
+6. Grow the recommendation catalog from real review notes before automating more analysis.
 
 ## Commands
 

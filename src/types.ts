@@ -48,13 +48,23 @@ export type EvidenceScore = {
   missing: EvidenceSlot[];
 };
 
+export type Recommendation = {
+  id: string;
+  title: string;
+  domain: string;
+  impact: 1 | 2 | 3 | 4 | 5;
+  costBand: '$' | '$$' | '$$$' | '$$$$';
+  effort: 'diy' | 'handyman' | 'locksmith' | 'electrician' | 'low-voltage-installer' | 'security-pro';
+  summary: string;
+  whyItMatters: string;
+  cautions: string[];
+};
+
 export type Finding = {
   domain: string;
   title: string;
   severity: number;
   confidence: number;
   evidence: string;
-  recommendation: string;
-  cost: string;
-  effort: string;
+  recommendationIds: string[];
 };
