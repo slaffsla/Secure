@@ -1,4 +1,4 @@
-import type { EvidenceSlot, Intake } from '../types';
+import type { EvidenceSlot, Intake, SelectedFeatureSignal } from '../types';
 
 const DRAFT_KEY = 'dwelling-risk-draft-v1';
 
@@ -9,6 +9,7 @@ type StoredEvidenceSlot = Omit<EvidenceSlot, 'files'> & {
 type StoredDraft = {
   intake: Intake;
   slots: StoredEvidenceSlot[];
+  selectedSignals?: SelectedFeatureSignal[];
 };
 
 export function loadDraft() {
@@ -20,9 +21,10 @@ export function loadDraft() {
   }
 }
 
-export function saveDraft(intake: Intake, slots: EvidenceSlot[]) {
+export function saveDraft(intake: Intake, slots: EvidenceSlot[], selectedSignals: SelectedFeatureSignal[]) {
   const draft: StoredDraft = {
     intake,
+    selectedSignals,
     slots: slots.map(({ files, ...slot }) => ({
       ...slot,
       fileNames: files.map((file) => file.name),
@@ -46,4 +48,8 @@ export function mergeDraftSlots(defaults: EvidenceSlot[], draft: StoredDraft | n
       ),
     };
   });
+}
+
+export function loadDraftSignals(draft: StoredDraft | null): SelectedFeatureSignal[] {
+  return draft?.selectedSignals ?? [];
 }

@@ -1,4 +1,5 @@
-import type { EvidenceItem, EvidenceSlot, Intake, Observation } from '../types';
+import { featureSignalByKey } from '../data/featureSignals';
+import type { EvidenceItem, EvidenceSlot, Intake, Observation, SelectedFeatureSignal } from '../types';
 
 const controlsToWatch = ['Lighting', 'Cameras', 'Deadbolt', 'Alarm'];
 
@@ -6,6 +7,7 @@ export function buildObservations(
   intake: Intake,
   slots: EvidenceSlot[],
   evidenceItems: EvidenceItem[],
+  selectedSignals: SelectedFeatureSignal[],
 ): Observation[] {
   const observations: Observation[] = [];
 
@@ -70,6 +72,27 @@ export function buildObservations(
       confidence: 95,
       source: 'user',
       evidenceIds: ['questionnaire:mode'],
+    });
+  }
+
+  for (const signal of selectedSignals) {
+    const definition = featureSignalByKey.get(signal.key);
+    if (!definition) continue;
+
+    observations.push({
+      id: `observation:feature:${signal.key}`,
+      kind: 'feature_signal_observed',
+      label: `${definition.label} observed`,
+      confidence: signal.confidence,
+      source: signal.source,
+      evidenceIds: evidenceItems
+        .filter((item) => item.category === definition.evidenceCategory)
+        .map((item) => item.id),
+      metadata: {
+        feature: signal.key,
+        domain: definition.domain,
+        evidenceCategory: definition.evidenceCategory,
+      },
     });
   }
 

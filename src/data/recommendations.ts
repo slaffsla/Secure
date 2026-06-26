@@ -105,6 +105,84 @@ export const recommendations: Recommendation[] = [
       'The best time to patch obvious vulnerabilities is before routines, possessions, and occupancy patterns are visible.',
     cautions: ['Separate must-fix security items from nice-to-have automation purchases.'],
   },
+  {
+    id: 'trim-concealment-vegetation',
+    title: 'Trim concealment near access points',
+    domain: 'Visibility',
+    impact: 4,
+    costBand: '$',
+    effort: 'diy',
+    summary:
+      'Reduce shrubs or overgrowth that hide windows, side paths, doors, or fence transitions.',
+    whyItMatters:
+      'Concealment lowers the perceived risk of being seen while someone tests access points.',
+    cautions: ['Preserve privacy intentionally; the goal is controlled visibility, not full exposure.'],
+  },
+  {
+    id: 'secure-side-gate',
+    title: 'Secure and audit side gate access',
+    domain: 'Burglary',
+    impact: 4,
+    costBand: '$$',
+    effort: 'handyman',
+    summary:
+      'Check side gates for latch quality, visibility, climbability, and whether they can be opened from outside.',
+    whyItMatters:
+      'Side access can let someone move from public view to rear or window access with little friction.',
+    cautions: ['Gate locks must still allow safe emergency exit where required.'],
+  },
+  {
+    id: 'sliding-door-anti-lift',
+    title: 'Check sliding-door anti-lift protection',
+    domain: 'Forced Entry',
+    impact: 5,
+    costBand: '$',
+    effort: 'diy',
+    summary:
+      'Verify the sliding door cannot be lifted out of its track and add an appropriate bar or secondary lock.',
+    whyItMatters:
+      'Sliding doors can be vulnerable even when their visible latch appears locked.',
+    cautions: ['Do not install a blocker that prevents fast exit in an emergency.'],
+  },
+  {
+    id: 'garage-house-door-harden',
+    title: 'Harden garage-to-house entry',
+    domain: 'Forced Entry',
+    impact: 4,
+    costBand: '$$',
+    effort: 'locksmith',
+    summary:
+      'Treat the interior garage door like an exterior door: quality deadbolt, reinforced strike, and door sensor.',
+    whyItMatters:
+      'If the garage is compromised, the interior door becomes the next meaningful barrier.',
+    cautions: ['Check fire-rating and local code before replacing garage-entry hardware or doors.'],
+  },
+  {
+    id: 'low-window-locks-sensors',
+    title: 'Prioritize low-window locks and sensors',
+    domain: 'Forced Entry',
+    impact: 4,
+    costBand: '$$',
+    effort: 'diy',
+    summary:
+      'Check low/easy-reach windows for working locks, secondary stops, and alarm contacts where appropriate.',
+    whyItMatters:
+      'Accessible windows can change the entry-risk picture even when doors are well protected.',
+    cautions: ['Bedroom egress windows must remain usable for emergency escape.'],
+  },
+  {
+    id: 'package-zone-control',
+    title: 'Reduce package-zone exposure',
+    domain: 'Burglary',
+    impact: 3,
+    costBand: '$',
+    effort: 'diy',
+    summary:
+      'Move deliveries out of direct view, add delivery instructions, or use a lockbox where package theft is likely.',
+    whyItMatters:
+      'Visible packages can attract opportunistic theft and reveal occupancy routines.',
+    cautions: ['Do not create a hiding place that also obscures someone approaching the front door.'],
+  },
 ];
 
 export const recommendationById = new Map(

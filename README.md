@@ -21,6 +21,7 @@ The current app is intentionally cheap to test: it runs as a React/Vite client a
 4. Add paid vision analysis behind a feature flag and per-report cost cap.
 5. Keep vendor recommendations category-first until report quality is proven.
 6. Grow the recommendation catalog from real review notes before automating more analysis.
+7. Use manual observed-signal tagging to test future AI-detected features before paying for vision calls.
 
 ## Commands
 
@@ -41,6 +42,7 @@ Intake + uploads
   -> Evidence items
   -> Observations
   -> Risk factors
+  -> Insights
   -> Recommendation matches
   -> Report
 ```

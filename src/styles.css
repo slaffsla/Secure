@@ -237,12 +237,48 @@ select {
 }
 
 .evidence-card,
+.signal-card,
+.insight,
 .finding,
 .prompt,
 .report-summary {
   border: 1px solid #cbd8c8;
   border-radius: 8px;
   background: #ffffff;
+}
+
+.signal-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.signal-card {
+  display: grid;
+  gap: 7px;
+  min-height: 98px;
+  padding: 13px;
+  text-align: left;
+  color: #1c2b22;
+}
+
+.signal-card span {
+  font-weight: 850;
+}
+
+.signal-card small {
+  color: #56635b;
+  line-height: 1.35;
+}
+
+.signal-card.selected {
+  border-color: #256f53;
+  background: #e5f2e9;
 }
 
 .evidence-card {
@@ -390,6 +426,37 @@ select {
   font-size: 1.45rem;
 }
 
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.insight {
+  display: grid;
+  gap: 7px;
+  padding: 15px;
+}
+
+.insight span {
+  color: #557063;
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.insight strong {
+  color: #17251c;
+  line-height: 1.25;
+  text-transform: capitalize;
+}
+
+.insight p {
+  margin: 0;
+  color: #536159;
+  line-height: 1.4;
+}
+
 .report-columns {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
@@ -508,6 +575,10 @@ select {
   .evidence-grid {
     grid-template-columns: repeat(2, minmax(220px, 1fr));
   }
+
+  .signal-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -521,6 +592,8 @@ select {
   }
 
   .evidence-grid,
+  .signal-grid,
+  .insight-grid,
   .report-columns,
   .report-summary {
     grid-template-columns: 1fr;

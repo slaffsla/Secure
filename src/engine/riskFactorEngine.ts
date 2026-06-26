@@ -3,6 +3,9 @@ import type { Observation, RiskFactor } from '../types';
 const byId = (observations: Observation[], id: string) =>
   observations.find((observation) => observation.id === id);
 
+const feature = (observations: Observation[], key: string) =>
+  byId(observations, `observation:feature:${key}`);
+
 export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
   const factors: RiskFactor[] = [];
 
@@ -88,6 +91,104 @@ export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
       confidence: buyerMode.confidence,
       observationIds: [buyerMode.id],
       recommendationIds: ['post-closing-rekey', 'pre-move-security-budget'],
+    });
+  }
+
+  const slidingDoor = feature(observations, 'sliding_glass_door');
+  if (slidingDoor) {
+    factors.push({
+      id: 'risk:sliding-door-entry',
+      domain: 'forced-entry',
+      title: 'Sliding glass door may need secondary protection',
+      severity: 5,
+      likelihood: 3,
+      confidence: slidingDoor.confidence,
+      observationIds: [slidingDoor.id],
+      recommendationIds: ['sliding-door-anti-lift', 'secondary-door-locking'],
+    });
+  }
+
+  const glassNearLock = feature(observations, 'glass_near_lock');
+  if (glassNearLock) {
+    factors.push({
+      id: 'risk:glass-near-lock',
+      domain: 'forced-entry',
+      title: 'Glass near lock may weaken door security',
+      severity: 4,
+      likelihood: 3,
+      confidence: glassNearLock.confidence,
+      observationIds: [glassNearLock.id],
+      recommendationIds: ['secondary-door-locking', 'reinforce-door-strikes'],
+    });
+  }
+
+  const denseVegetation = feature(observations, 'dense_vegetation');
+  if (denseVegetation) {
+    factors.push({
+      id: 'risk:concealment-vegetation',
+      domain: 'visibility',
+      title: 'Vegetation may create concealment',
+      severity: 4,
+      likelihood: 4,
+      confidence: denseVegetation.confidence,
+      observationIds: [denseVegetation.id],
+      recommendationIds: ['trim-concealment-vegetation', 'targeted-motion-lighting'],
+    });
+  }
+
+  const sideGate = feature(observations, 'side_gate');
+  if (sideGate) {
+    factors.push({
+      id: 'risk:side-gate-access',
+      domain: 'burglary',
+      title: 'Side gate or alley access may bypass street visibility',
+      severity: 4,
+      likelihood: 4,
+      confidence: sideGate.confidence,
+      observationIds: [sideGate.id],
+      recommendationIds: ['secure-side-gate', 'targeted-motion-lighting'],
+    });
+  }
+
+  const garageDoor = feature(observations, 'garage_interior_door');
+  if (garageDoor) {
+    factors.push({
+      id: 'risk:garage-interior-door',
+      domain: 'forced-entry',
+      title: 'Garage-to-house door should be treated as a barrier',
+      severity: 4,
+      likelihood: 3,
+      confidence: garageDoor.confidence,
+      observationIds: [garageDoor.id],
+      recommendationIds: ['garage-house-door-harden', 'reinforce-door-strikes'],
+    });
+  }
+
+  const lowWindow = feature(observations, 'low_window');
+  if (lowWindow) {
+    factors.push({
+      id: 'risk:low-window-access',
+      domain: 'forced-entry',
+      title: 'Low or easy-reach windows may increase entry exposure',
+      severity: 4,
+      likelihood: 3,
+      confidence: lowWindow.confidence,
+      observationIds: [lowWindow.id],
+      recommendationIds: ['low-window-locks-sensors'],
+    });
+  }
+
+  const packageZone = feature(observations, 'package_drop_zone');
+  if (packageZone) {
+    factors.push({
+      id: 'risk:package-zone-exposure',
+      domain: 'burglary',
+      title: 'Package drop zone may create opportunistic theft exposure',
+      severity: 3,
+      likelihood: 3,
+      confidence: packageZone.confidence,
+      observationIds: [packageZone.id],
+      recommendationIds: ['package-zone-control', 'camera-after-access-control'],
     });
   }
 

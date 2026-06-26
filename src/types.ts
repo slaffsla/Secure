@@ -42,6 +42,31 @@ export type EvidenceSlot = {
   files: File[];
 };
 
+export type FeatureSignalKey =
+  | 'sliding_glass_door'
+  | 'glass_near_lock'
+  | 'dense_vegetation'
+  | 'side_gate'
+  | 'visible_camera'
+  | 'motion_lighting'
+  | 'garage_interior_door'
+  | 'low_window'
+  | 'package_drop_zone';
+
+export type FeatureSignalDefinition = {
+  key: FeatureSignalKey;
+  label: string;
+  evidenceCategory: EvidenceKey;
+  domain: RiskDomain;
+  riskHint: string;
+};
+
+export type SelectedFeatureSignal = {
+  key: FeatureSignalKey;
+  source: 'user' | 'ai' | 'human-reviewer';
+  confidence: number;
+};
+
 export type EvidenceScore = {
   completion: number;
   confidence: number;
@@ -62,6 +87,7 @@ export type EvidenceItem = {
 export type ObservationKind =
   | 'evidence_slot_provided'
   | 'evidence_slot_missing'
+  | 'feature_signal_observed'
   | 'address_context_provided'
   | 'address_context_missing'
   | 'security_control_reported'
@@ -121,4 +147,12 @@ export type AssessmentModel = {
   observations: Observation[];
   riskFactors: RiskFactor[];
   findings: Finding[];
+  insights: Insight[];
+};
+
+export type Insight = {
+  id: string;
+  label: string;
+  value: string;
+  detail: string;
 };

@@ -1,8 +1,17 @@
 import { recommendationById } from '../data/recommendations';
 import { buildEvidenceItems } from './evidenceEngine';
+import { buildInsights } from './insightEngine';
 import { buildObservations } from './observationEngine';
 import { buildRiskFactors } from './riskFactorEngine';
-import type { AssessmentModel, EvidenceScore, EvidenceSlot, Finding, Intake, RiskFactor } from '../types';
+import type {
+  AssessmentModel,
+  EvidenceScore,
+  EvidenceSlot,
+  Finding,
+  Intake,
+  RiskFactor,
+  SelectedFeatureSignal,
+} from '../types';
 
 export function scoreEvidence(slots: EvidenceSlot[]): EvidenceScore {
   const filled = slots.filter((slot) => slot.files.length > 0);
@@ -53,16 +62,22 @@ export function buildFindings(riskFactors: RiskFactor[]): Finding[] {
     .sort((a, b) => b.severity * b.confidence - a.severity * a.confidence);
 }
 
-export function buildAssessmentModel(intake: Intake, slots: EvidenceSlot[]): AssessmentModel {
+export function buildAssessmentModel(
+  intake: Intake,
+  slots: EvidenceSlot[],
+  selectedSignals: SelectedFeatureSignal[],
+): AssessmentModel {
   const evidenceItems = buildEvidenceItems(intake, slots);
-  const observations = buildObservations(intake, slots, evidenceItems);
+  const observations = buildObservations(intake, slots, evidenceItems, selectedSignals);
   const riskFactors = buildRiskFactors(observations);
   const findings = buildFindings(riskFactors);
+  const insights = buildInsights(riskFactors);
 
   return {
     evidenceItems,
     observations,
     riskFactors,
     findings,
+    insights,
   };
 }

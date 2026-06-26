@@ -42,6 +42,16 @@ export function Report({ assessment, evidence, intake, visible }: ReportProps) {
         </div>
       </div>
 
+      <div className="insight-grid">
+        {assessment.insights.map((insight) => (
+          <article className="insight" key={insight.id}>
+            <span>{insight.label}</span>
+            <strong>{insight.value}</strong>
+            <p>{insight.detail}</p>
+          </article>
+        ))}
+      </div>
+
       <div className="report-columns">
         <div>
           <h3>Top fixes</h3>
