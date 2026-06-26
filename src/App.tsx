@@ -5,9 +5,12 @@ import { FeatureSignalPanel } from './components/FeatureSignalPanel';
 import { Hero } from './components/Hero';
 import { IntakePanel } from './components/IntakePanel';
 import { Report } from './components/Report';
+import { ScenarioLoader } from './components/ScenarioLoader';
 import { evidenceDefaults } from './data/evidenceSlots';
 import { initialIntake } from './data/intakeOptions';
+import { sampleScenarios } from './data/sampleScenarios';
 import { buildAssessmentModel, scoreEvidence } from './engine/riskEngine';
+import { buildScenarioSlots } from './scenarios/applyScenario';
 import { loadDraft, loadDraftSignals, mergeDraftSlots, saveDraft } from './storage/draftStorage';
 import type { EvidenceKey, EvidenceSlot, FeatureSignalKey, Intake, SelectedFeatureSignal } from './types';
 
@@ -56,6 +59,16 @@ export function App() {
     setReportReady(false);
   };
 
+  const loadScenario = (scenarioId: string) => {
+    const scenario = sampleScenarios.find((item) => item.id === scenarioId);
+    if (!scenario) return;
+
+    setIntake({ ...scenario.intake });
+    setSlots(buildScenarioSlots(scenario));
+    setSelectedSignals(scenario.selectedSignals.map((signal) => ({ ...signal })));
+    setReportReady(true);
+  };
+
   return (
     <main>
       <Hero evidence={evidence} findings={assessment.findings} />
@@ -64,6 +77,7 @@ export function App() {
         <IntakePanel intake={intake} onChange={updateIntake} />
 
         <section className="content">
+          <ScenarioLoader onLoad={loadScenario} />
           <EvidenceGrid slots={slots} onAddFiles={handleFiles} onClearSlot={clearSlot} />
           <FeatureSignalPanel selectedSignals={selectedSignals} onToggle={toggleSignal} />
 

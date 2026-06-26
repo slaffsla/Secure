@@ -67,6 +67,15 @@ export type SelectedFeatureSignal = {
   confidence: number;
 };
 
+export type ScenarioDefinition = {
+  id: string;
+  label: string;
+  description: string;
+  intake: Intake;
+  evidenceFileNames: Partial<Record<EvidenceKey, string[]>>;
+  selectedSignals: SelectedFeatureSignal[];
+};
+
 export type EvidenceScore = {
   completion: number;
   confidence: number;

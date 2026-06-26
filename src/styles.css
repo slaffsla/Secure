@@ -238,6 +238,7 @@ select {
 
 .evidence-card,
 .signal-card,
+.scenario-button,
 .insight,
 .finding,
 .prompt,
@@ -245,6 +246,40 @@ select {
   border: 1px solid #cbd8c8;
   border-radius: 8px;
   background: #ffffff;
+}
+
+.scenario-loader {
+  display: grid;
+  gap: 12px;
+}
+
+.scenario-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.scenario-button {
+  display: grid;
+  gap: 7px;
+  min-height: 104px;
+  padding: 13px;
+  text-align: left;
+  color: #1b2b22;
+}
+
+.scenario-button span {
+  font-weight: 850;
+}
+
+.scenario-button small {
+  color: #59665d;
+  line-height: 1.35;
+}
+
+.scenario-button:hover {
+  border-color: #256f53;
+  background: #f6fbf7;
 }
 
 .signal-panel {
@@ -579,6 +614,10 @@ select {
   .signal-grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));
   }
+
+  .scenario-row {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -593,6 +632,7 @@ select {
 
   .evidence-grid,
   .signal-grid,
+  .scenario-row,
   .insight-grid,
   .report-columns,
   .report-summary {
