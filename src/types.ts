@@ -1,6 +1,14 @@
 export type PropertyMode = 'buyer' | 'owner';
 
-export type PropertyType = 'single-family' | 'townhouse' | 'condo' | 'multi-family' | '';
+export type PropertyType = 
+  | 'single-family' 
+  | 'townhouse' 
+  | 'condo' 
+  | 'multi-family' 
+  | 'retail-shop' 
+  | 'small-commercial' 
+  | 'office' 
+  | '';
 
 export type Concern =
   | 'burglary'
@@ -32,6 +40,8 @@ export type Intake = {
   concerns: Concern[];
   budget: Budget;
   humanReview: boolean;
+  // New fields for better modeling
+  perceivedWealth?: 'low' | 'medium' | 'high';   // optional self-report
 };
 
 export type EvidenceSlot = {
@@ -51,8 +61,11 @@ export type FeatureSignalKey =
   | 'motion_lighting'
   | 'garage_interior_door'
   | 'low_window'
-  | 'package_drop_zone';
-
+  | 'package_drop_zone'
+  // New commercial/retail signals will go here
+  | 'visible_high_value_stock'
+  | 'poor_stock_concealment'
+  | 'roller_shutter_status';
 export type FeatureSignalDefinition = {
   key: FeatureSignalKey;
   label: string;
@@ -114,7 +127,9 @@ export type Observation = {
   metadata?: Record<string, string>;
 };
 
-export type RiskDomain = 'burglary' | 'forced-entry' | 'visibility' | 'surveillance' | 'smart-home' | 'buyer';
+export type PayoffLevel = 'low' | 'medium' | 'high';
+
+export type RiskDomain = 'burglary' | 'forced-entry' | 'visibility' | 'surveillance' | 'smart-home' | 'buyer' | 'retail';
 
 export type RiskFactor = {
   id: string;
@@ -122,7 +137,8 @@ export type RiskFactor = {
   title: string;
   severity: number;
   likelihood: number;
-  confidence: number;
+  confidence: number;           // how confident we are in this observation
+  payoffMultiplier?: number;    // new: attractiveness / payoff axis (1.0 = neutral)
   observationIds: string[];
   recommendationIds: string[];
 };
