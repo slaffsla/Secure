@@ -9,6 +9,7 @@ const feature = (observations: Observation[], key: string) =>
 export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
   const factors: RiskFactor[] = [];
 
+  // === RESIDENTIAL / GENERAL ===
   const rearMissing = byId(observations, 'observation:rear:missing');
   if (rearMissing) {
     factors.push({
@@ -17,11 +18,11 @@ export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
       title: 'Rear access cannot be assessed yet',
       severity: 5,
       likelihood: 4,
-      confidence: 85,
+      confidence: Math.round(rearMissing.confidence * 0.75),
+      payoffMultiplier: 1.0,
       observationIds: [rearMissing.id],
       recommendationIds: ['rear-access-documentation', 'targeted-motion-lighting'],
     });
-  }
 
   const doorMissing = byId(observations, 'observation:doors:missing');
   if (doorMissing) {
@@ -80,6 +81,7 @@ export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
     });
   }
 
+
   const buyerMode = byId(observations, 'observation:mode:buyer');
   if (buyerMode) {
     factors.push({
@@ -105,20 +107,6 @@ export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
       confidence: slidingDoor.confidence,
       observationIds: [slidingDoor.id],
       recommendationIds: ['sliding-door-anti-lift', 'secondary-door-locking'],
-    });
-  }
-
-  const glassNearLock = feature(observations, 'glass_near_lock');
-  if (glassNearLock) {
-    factors.push({
-      id: 'risk:glass-near-lock',
-      domain: 'forced-entry',
-      title: 'Glass near lock may weaken door security',
-      severity: 4,
-      likelihood: 3,
-      confidence: glassNearLock.confidence,
-      observationIds: [glassNearLock.id],
-      recommendationIds: ['secondary-door-locking', 'reinforce-door-strikes'],
     });
   }
 
@@ -191,6 +179,41 @@ export function buildRiskFactors(observations: Observation[]): RiskFactor[] {
       recommendationIds: ['package-zone-control', 'camera-after-access-control'],
     });
   }
+// === RETAIL / COMMERCIAL ===
+  const highValueStock = feature(observations, 'visible_high_value_stock');
+  if (highValueStock) {
+    factors.push({
+      id: 'risk:high-payoff-stock',
+      domain: 'burglary',
+      title: 'High-value stock is highly visible',
+      severity: 5,
+      likelihood: 4,
+      confidence: highValueStock.confidence,
+      payoffMultiplier: 1.65,
+      observationIds: [highValueStock.id],
+      recommendationIds: ['retail-visible-high-value-stock', 'retail-roller-shutters'],
+    });
+  }
 
-  return factors.sort((a, b) => b.severity * b.likelihood * b.confidence - a.severity * a.likelihood * a.confidence);
-}
+  // Interaction example
+  const glassNearLock = feature(observations, 'glass_near_lock');
+  if (glassNearLock) {
+    factors.push({
+      id: 'risk:glass-near-lock',
+      domain: 'forced-entry',
+      title: 'Glass near lock weakens security',
+      severity: 4,
+      likelihood: 3,
+      confidence: glassNearLock.confidence,
+      payoffMultiplier: 1.2,
+      observationIds: [glassNearLock.id],
+      recommendationIds: ['secondary-door-locking'],
+    });
+  }
+
+  return factors.sort((a, b) => {
+    const scoreA = a.severity * a.likelihood * (a.confidence / 100) * (a.payoffMultiplier || 1);
+    const scoreB = b.severity * b.likelihood * (b.confidence / 100) * (b.payoffMultiplier || 1);
+    return scoreB - scoreA;
+  });
+}}
